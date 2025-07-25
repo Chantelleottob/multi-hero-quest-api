@@ -6,8 +6,10 @@ from datetime import datetime
 app = Flask(__name__)
 
 # Notion API configuration
-NOTION_TOKEN = "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"
-QUESTS_DATABASE_ID = "1e4e98df78c0801bb998e33020586d3d"
+
+import os
+NOTION_TOKEN = os.getenv("NOTION_TOKEN", "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")
+QUESTS_DATABASE_ID = os.getenv("QUESTS_DATABASE_ID", "1e4e98df78c0801bb998e33020586d3d")
 
 from flask import Flask, request, jsonify
 import requests
@@ -27,7 +29,7 @@ NOTION_HEADERS = {
 }
 
 
-def parse_hero_substat(hero_substats_string):  # Fixed function name
+def parse_hero_substat(hero_substat_string):  # Fixed function name
     """
     Parse 'Creativity - Chantelle, Rizzma - Bob, Logic - Rudy' 
     into {'Chantelle': 'Creativity', 'Bob': 'Rizzma', 'Rudy': 'Logic'}
@@ -159,12 +161,12 @@ def process_multi_hero_quest_endpoint():
         return jsonify({"error": str(e)}), 500
 
 
-def process_multi_hero_quest(quest_name, hero_names, hero_substats, difficulty,
+def process_multi_hero_quest(quest_name, hero_names, hero_substat, difficulty,
                              xp_value):
     """Core function to break down multi-hero quest into individual quests"""
 
-    # Parse hero substats mapping - Fixed function name
-    hero_substat_map = parse_hero_substat(hero_substats)
+    # Parse hero substat mapping - Fixed function name
+    hero_substat_map = parse_hero_substat(hero_substat)
 
     created_quests = []
     errors = []
